@@ -33,7 +33,7 @@ auto-swap-bot/
 
 1. **Clone repo** atau buat folder:
    ```bash
-   mkdir auto-swap-bot && cd auto-swap-bot
+   git clone https://github.com/airdrop-org/kyo-finance.git
    ```
 
 2. **Install dependency Python**:
