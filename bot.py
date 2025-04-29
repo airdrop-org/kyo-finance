@@ -73,6 +73,14 @@ def swap_weth_to_kyo(amount):
     tx = send_tx(UNIVERSAL_ROUTER, data)
     print(f"[SWAP] {w3.from_wei(amount, 'ether')} WETH → KYO: {tx}")
 
+def swap_kyo_to_weth(amount):
+    approve(kyo, UNIVERSAL_ROUTER, amount)
+    path = [KYO, WETH]
+    deadline = int(time.time()) + 60
+    data = router.encodeABI("swapExactTokensForTokens", [amount, 0, path, WALLET, deadline])
+    tx = send_tx(UNIVERSAL_ROUTER, data)
+    print(f"[SWAP] {w3.from_wei(amount, 'ether')} KYO → WETH: {tx}")
+
 def add_liquidity(weth_amount, kyo_amount):
     approve(weth, POSITION_MANAGER, weth_amount)
     approve(kyo, POSITION_MANAGER, kyo_amount)
@@ -94,15 +102,39 @@ def add_liquidity(weth_amount, kyo_amount):
     tx = send_tx(POSITION_MANAGER, data)
     print(f"[ADD LP] {w3.from_wei(weth_amount, 'ether')} WETH + {w3.from_wei(kyo_amount, 'ether')} KYO: {tx}")
 
+def remove_liquidity_80_percent():
+    # Periksa jumlah LP yang dimiliki
+    lp_balance = position.functions.balanceOf(WALLET).call()
+    if lp_balance == 0:
+        print("⚠️ Tidak ada LP yang dapat di-remove.")
+        return
+
+    # Hitung 80% dari LP balance
+    amount_to_remove = lp_balance * 80 // 100
+
+    # Persiapkan data untuk transaksi remove liquidity
+    params = {
+        "tokenId": 0,  # Ganti dengan ID token LP jika diperlukan
+        "liquidity": amount_to_remove,
+        "amount0Min": 0,
+        "amount1Min": 0,
+        "deadline": int(time.time()) + 60
+    }
+    data = position.encodeABI("removeLiquidity", [params])
+    tx = send_tx(POSITION_MANAGER, data)
+    print(f"[REMOVE LP] Berhasil menghapus 80% LP: {tx}")
+
 # === MAIN LOOP ===
 if __name__ == "__main__":
     print("🚀 Auto swap & liquidity started!")
 
     while True:
-        print("\n🌀 Starting new session of 20 swaps...")
+        print("\n🌈 Starting new session of swaps...")
         total_weth_used = 0
+        total_kyo_used = 0
 
-        for i in range(1, 21):
+        # 10x swap WETH → KYO
+        for i in range(1, 11):
             amt = w3.to_wei(round(random.uniform(0.0001, 0.00015), 8), "ether")
             swap_weth_to_kyo(amt)
             total_weth_used += amt
@@ -110,8 +142,20 @@ if __name__ == "__main__":
             print(f"⏱️ Waiting {delay} sec before next swap...")
             time.sleep(delay)
 
-        print("✅ Finished 20 swaps. Adding liquidity...")
-        add_liquidity(total_weth_used, w3.to_wei("1.83", "ether"))
+        # 10x swap KYO → WETH
+        for i in range(1, 11):
+            amt = w3.to_wei(round(random.uniform(0.0001, 0.00015), 8), "ether")
+            swap_kyo_to_weth(amt)
+            total_kyo_used += amt
+            delay = random.randint(10, 30)
+            print(f"⏱️ Waiting {delay} sec before next swap...")
+            time.sleep(delay)
+
+        print("✅ Finished swaps. Adding liquidity...")
+        add_liquidity(total_weth_used, total_kyo_used)
+
+        print("🛠️ Removing 80% of staked liquidity...")
+        remove_liquidity_80_percent()
 
         next_sleep = random.randint(72000, 86400)  # 20–24 jam dalam detik
         hrs = round(next_sleep / 3600, 2)
