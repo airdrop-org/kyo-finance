@@ -1,0 +1,101 @@
+{
+  "WETH": [
+    {
+      "inputs": [
+        { "internalType": "address", "name": "guy", "type": "address" },
+        { "internalType": "uint256", "name": "wad", "type": "uint256" }
+      ],
+      "name": "approve",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "deposit",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "dst", "type": "address" },
+        { "internalType": "uint256", "name": "wad", "type": "uint256" }
+      ],
+      "name": "transfer",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "KYO": [
+    {
+      "inputs": [
+        { "internalType": "address", "name": "spender", "type": "address" },
+        { "internalType": "uint256", "name": "value", "type": "uint256" }
+      ],
+      "name": "approve",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "to", "type": "address" },
+        { "internalType": "uint256", "name": "value", "type": "uint256" }
+      ],
+      "name": "transfer",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "UniversalRouter": [
+    {
+      "inputs": [
+        { "internalType": "uint256", "name": "amountIn", "type": "uint256" },
+        { "internalType": "uint256", "name": "amountOutMin", "type": "uint256" },
+        { "internalType": "address[]", "name": "path", "type": "address[]" },
+        { "internalType": "address", "name": "to", "type": "address" },
+        { "internalType": "uint256", "name": "deadline", "type": "uint256" }
+      ],
+      "name": "swapExactTokensForTokens",
+      "outputs": [{ "internalType": "uint256[]", "name": "", "type": "uint256[]" }],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "PositionManager": [
+    {
+      "inputs": [
+        {
+          "components": [
+            { "internalType": "address", "name": "token0", "type": "address" },
+            { "internalType": "address", "name": "token1", "type": "address" },
+            { "internalType": "uint24", "name": "fee", "type": "uint24" },
+            { "internalType": "int24", "name": "tickLower", "type": "int24" },
+            { "internalType": "int24", "name": "tickUpper", "type": "int24" },
+            { "internalType": "uint256", "name": "amount0Desired", "type": "uint256" },
+            { "internalType": "uint256", "name": "amount1Desired", "type": "uint256" },
+            { "internalType": "uint256", "name": "amount0Min", "type": "uint256" },
+            { "internalType": "uint256", "name": "amount1Min", "type": "uint256" },
+            { "internalType": "address", "name": "recipient", "type": "address" },
+            { "internalType": "uint256", "name": "deadline", "type": "uint256" }
+          ],
+          "internalType": "struct MintParams",
+          "name": "params",
+          "type": "tuple"
+        }
+      ],
+      "name": "mint",
+      "outputs": [
+        { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+        { "internalType": "uint128", "name": "liquidity", "type": "uint128" },
+        { "internalType": "uint256", "name": "amount0", "type": "uint256" },
+        { "internalType": "uint256", "name": "amount1", "type": "uint256" }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    }
+  ]
+}
